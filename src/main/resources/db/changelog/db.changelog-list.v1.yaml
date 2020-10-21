@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: list.v1
+      author: Repsys
+      changes:
+        - createTable:
+            tableName: list
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKeyName: pk_list
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: create_date
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modify_date
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
