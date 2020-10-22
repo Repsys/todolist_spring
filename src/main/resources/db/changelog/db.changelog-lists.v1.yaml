@@ -1,24 +1,17 @@
 databaseChangeLog:
   - changeSet:
-      id: task.v1
+      id: list.v1
       author: Repsys
       changes:
         - createTable:
-            tableName: task
+            tableName: lists
             columns:
               - column:
                   name: id
                   type: UUID
                   constraints:
-                    primaryKeyName: pk_task
+                    primaryKeyName: pk_list
                     primaryKey: true
-                    nullable: false
-              - column:
-                  name: list_id
-                  type: UUID
-                  constraints:
-                    foreignKeyName: fk_task_list
-                    references: list(id)
                     nullable: false
               - column:
                   name: name
@@ -33,18 +26,5 @@ databaseChangeLog:
               - column:
                   name: modify_date
                   type: TIMESTAMP
-                  constraints:
-                    nullable: false
-              - column:
-                  name: description
-                  type: TEXT
-                  constraints:
-                    nullable: false
-              - column:
-                  name: priority
-                  type: SMALLINT
-              - column:
-                  name: is_done
-                  type: BOOLEAN
                   constraints:
                     nullable: false

@@ -1,5 +1,5 @@
 databaseChangeLog:
   - include:
-      file: "db/changelog/db.changelog-list.v1.yaml"
+      file: "db/changelog/db.changelog-lists.v1.yaml"
   - include:
-      file: "db/changelog/db.changelog-task.v1.yaml"
+      file: "db/changelog/db.changelog-tasks.v1.yaml"
