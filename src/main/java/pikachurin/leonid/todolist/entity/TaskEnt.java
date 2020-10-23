@@ -1,7 +1,7 @@
 package pikachurin.leonid.todolist.entity;
 
 import lombok.*;
-import pikachurin.leonid.todolist.entity.ListEnt;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -22,9 +22,11 @@ public class TaskEnt {
     private String name;
 
     @Getter @Setter
+    @CreationTimestamp
     private java.sql.Timestamp create_date;
 
     @Getter @Setter
+    @CreationTimestamp
     private java.sql.Timestamp modify_date;
 
     @Getter @Setter

@@ -1,4 +1,4 @@
-package pikachurin.leonid.todolist;
+package pikachurin.leonid.todolist.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
