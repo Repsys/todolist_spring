@@ -1,36 +1,43 @@
 package pikachurin.leonid.todolist.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.sql.Timestamp;
 import java.util.*;
 
-@Entity
+@Entity(name = "List")
 @Table(name = "lists")
 public class ListEnt {
     @Getter
     @Id
     private UUID id;
 
-    @Getter @Setter
+    @Getter
+    @JsonIgnore
     @OneToMany(mappedBy = "list", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TaskEnt> tasks;
 
     @Getter @Setter
     private String name;
 
-    @Getter @Setter
+    @Getter
     @CreationTimestamp
-    private java.sql.Timestamp create_date;
+    private Timestamp createDate;
 
-    @Getter @Setter
-    @CreationTimestamp
-    private java.sql.Timestamp modify_date;
+    @Getter
+    @UpdateTimestamp
+    private Timestamp modifyDate;
 
     public ListEnt()
     {
         id = UUID.randomUUID();
         name = "";
     }
+
 }

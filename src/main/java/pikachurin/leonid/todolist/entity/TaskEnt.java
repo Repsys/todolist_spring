@@ -1,12 +1,15 @@
 package pikachurin.leonid.todolist.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.UUID;
 
-@Entity
+@Entity(name = "Task")
 @Table(name = "tasks")
 public class TaskEnt {
     @Getter
@@ -14,6 +17,7 @@ public class TaskEnt {
     private UUID id;
 
     @Getter @Setter
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "list_id")
     private ListEnt list;
@@ -21,13 +25,13 @@ public class TaskEnt {
     @Getter @Setter
     private String name;
 
-    @Getter @Setter
+    @Getter
     @CreationTimestamp
-    private java.sql.Timestamp create_date;
+    private java.sql.Timestamp createDate;
 
-    @Getter @Setter
-    @CreationTimestamp
-    private java.sql.Timestamp modify_date;
+    @Getter
+    @UpdateTimestamp
+    private java.sql.Timestamp modifyDate;
 
     @Getter @Setter
     private String description;
@@ -36,10 +40,14 @@ public class TaskEnt {
     private Integer priority;
 
     @Getter @Setter
-    private Boolean is_done;
+    private Boolean isDone;
 
     public TaskEnt()
     {
         id = UUID.randomUUID();
+        name = "";
+        description = "";
+        priority = 0;
+        isDone = false;
     }
 }
