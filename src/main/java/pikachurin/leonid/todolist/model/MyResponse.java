@@ -1,4 +1,4 @@
-package pikachurin.leonid.todolist.controller;
+package pikachurin.leonid.todolist.model;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

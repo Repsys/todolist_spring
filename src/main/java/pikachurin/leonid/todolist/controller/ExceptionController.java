@@ -4,6 +4,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 import pikachurin.leonid.todolist.exception.*;
+import pikachurin.leonid.todolist.model.MyResponse;
 
 @ControllerAdvice
 public class ExceptionController {
