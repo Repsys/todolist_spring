@@ -21,11 +21,25 @@ public class ListsService {
 
     /**
      * Получить списки с сортировкой и фильтрацией
-     * @param pageable - параметры пагинации и сортировки
+     * @param quantity - количество списков на странице
+     * @param page - номер страницы
+     * @param sort - параметр сортировки
+     * @param isInvert - инвертировать порядок списков
      * @return массив списков
      */
-    public List<ListEnt> getLists(Pageable pageable)
+    public List<ListEnt> getLists(Integer quantity, Integer page, String sort, Boolean isInvert)
     {
+        if (quantity > 100 || quantity < 1) quantity = 10;
+
+        String[] sortValues = {"name", "createDate", "modifyDate"};
+        if (Arrays.stream(sortValues).noneMatch(sort::equals))
+            throw new InvalidSortValueException(sort);
+
+        Sort.Direction sortDir;
+        if (isInvert) sortDir = Sort.Direction.DESC;
+        else sortDir = Sort.Direction.ASC;
+
+        Pageable pageable = PageRequest.of(page, quantity, Sort.by(sortDir, sort));
         return listRepo.findAll(pageable).getContent();
     }
 

@@ -28,7 +28,7 @@ public class ListsController {
      * @param quantity - количество списков на странице
      * @param page - номер страницы
      * @param sort - параметр сортировки
-     * @param isInvert - инвертировать направление сортировки
+     * @param isInvert - инвертировать порядок списков
      * @param name - значение фильтрации для name
      * @param createDate - значение фильтрации для createDate
      * @param modifyDate - значение фильтрации для modifyDate
@@ -45,18 +45,7 @@ public class ListsController {
             @RequestParam(required = false) Optional<Timestamp> createDate,
             @RequestParam(required = false) Optional<Timestamp> modifyDate)
     {
-        if (quantity > 100 || quantity < 1) quantity = 10;
-
-        String[] sortValues = {"name", "createDate", "modifyDate"};
-        if (Arrays.stream(sortValues).noneMatch(sort::equals))
-            throw new InvalidSortValueException(sort);
-
-        Sort.Direction sortDir;
-        if (isInvert) sortDir = Sort.Direction.DESC;
-        else sortDir = Sort.Direction.ASC;
-
-        Pageable pageable = PageRequest.of(page, quantity, Sort.by(sortDir, sort));
-        List<ListEnt> lists = listsService.getLists(pageable);
+        List<ListEnt> lists = listsService.getLists(quantity, page, sort, isInvert);
         return new ResponseEntity<>(lists, HttpStatus.OK);
     }
 

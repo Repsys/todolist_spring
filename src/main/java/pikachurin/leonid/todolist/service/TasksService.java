@@ -24,14 +24,18 @@ public class TasksService {
     /**
      * Получить задачи из списка
      * @param listId - id списка
-     * @param pageable - параметры пагинации и сортировки
+     * @param quantity - количество задач на странице
+     * @param page - номер страницы
      * @return массив задач
      */
-    public List<TaskEnt> getTasks(UUID listId, Pageable pageable)
+    public List<TaskEnt> getTasks(UUID listId, int quantity, int page)
     {
         Optional<ListEnt> optionalList = listRepo.findById(listId);
         if (optionalList.isEmpty())
             throw new ListNotFoundException(listId);
+
+        if (quantity > 100 || quantity < 1) quantity = 10;
+        Pageable pageable = PageRequest.of(page, quantity);
 
         return taskRepo.findAllByList_Id(listId, pageable).getContent();
     }

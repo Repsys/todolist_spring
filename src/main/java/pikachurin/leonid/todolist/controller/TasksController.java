@@ -36,9 +36,7 @@ public class TasksController {
             @RequestParam(required = false, defaultValue = "10") Integer quantity,
             @RequestParam(required = false, defaultValue = "0") Integer page)
     {
-        if (quantity > 100 || quantity < 1) quantity = 10;
-        Pageable pageable = PageRequest.of(page, quantity);
-        List<TaskEnt> tasks = tasksService.getTasks(listId, pageable);
+        List<TaskEnt> tasks = tasksService.getTasks(listId, quantity, page);
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
