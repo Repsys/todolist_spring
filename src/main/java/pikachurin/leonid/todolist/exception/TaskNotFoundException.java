@@ -4,6 +4,9 @@ import org.springframework.http.HttpStatus;
 
 import java.util.UUID;
 
+/**
+ * Исключение: Задача не найдена
+ */
 public class TaskNotFoundException extends RequestException {
 
     public TaskNotFoundException(UUID id) {

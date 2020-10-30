@@ -2,8 +2,9 @@ package pikachurin.leonid.todolist.model;
 
 import lombok.*;
 
-import java.util.UUID;
-
+/**
+ * Тело запроса для Задачи
+ */
 public class TaskRequestBody {
     @Getter @Setter
     private String name;

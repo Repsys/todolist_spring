@@ -9,12 +9,15 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.UUID;
 
+/**
+ * JPA Сущность Задачи
+ */
 @Entity(name = "Task")
 @Table(name = "tasks")
 public class TaskEnt {
     @Getter
     @Id
-    private UUID id;
+    private final UUID id = UUID.randomUUID();
 
     @Getter @Setter
     @JsonIgnore
@@ -42,12 +45,4 @@ public class TaskEnt {
     @Getter @Setter
     private Boolean isDone;
 
-    public TaskEnt()
-    {
-        id = UUID.randomUUID();
-        name = "";
-        description = "";
-        priority = 0;
-        isDone = false;
-    }
 }

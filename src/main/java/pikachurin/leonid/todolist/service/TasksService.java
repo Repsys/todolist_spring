@@ -11,24 +11,36 @@ import pikachurin.leonid.todolist.repository.*;
 
 import java.util.*;
 
+/**
+ * Сервис по операциям с Задачами
+ */
 @Service
 public class TasksService {
     @Autowired
-    ListRepo listRepo;
+    private ListRepo listRepo;
     @Autowired
-    TaskRepo taskRepo;
+    private TaskRepo taskRepo;
 
-    public List<TaskEnt> getTasks(UUID listId, Integer quantity, Integer page)
+    /**
+     * Получить задачи из списка
+     * @param listId - id списка
+     * @param pageable - параметры пагинации и сортировки
+     * @return массив задач
+     */
+    public List<TaskEnt> getTasks(UUID listId, Pageable pageable)
     {
         Optional<ListEnt> optionalList = listRepo.findById(listId);
         if (optionalList.isEmpty())
             throw new ListNotFoundException(listId);
-        if (quantity > 100 || quantity < 1) quantity = 10;
 
-        Pageable pageable = PageRequest.of(page, quantity);
         return taskRepo.findAllByList_Id(listId, pageable).getContent();
     }
 
+    /**
+     * Получить задачу по её id
+     * @param id - id задачи
+     * @return задача
+     */
     public TaskEnt getTask(UUID id)
     {
         Optional<TaskEnt> optionalTask = taskRepo.findById(id);
@@ -38,6 +50,12 @@ public class TasksService {
         return optionalTask.get();
     }
 
+    /**
+     * Создать новую задачу в списке
+     * @param listId - id списка
+     * @param taskBody - параметры новой задачи
+     * @return созданная задача
+     */
     public TaskEnt addTask(UUID listId, TaskRequestBody taskBody)
     {
         Optional<ListEnt> optionalList = listRepo.findById(listId);
@@ -56,6 +74,12 @@ public class TasksService {
         return task;
     }
 
+    /**
+     * Изменить задачу
+     * @param id - id задачи
+     * @param taskBody - параметры изменённой задачи
+     * @return изменённая задача
+     */
     public TaskEnt modifyTask(UUID id, TaskRequestBody taskBody)
     {
         Optional<TaskEnt> optionalTask = taskRepo.findById(id);
@@ -73,6 +97,10 @@ public class TasksService {
         return task;
     }
 
+    /**
+     * Пометить задачу как сделанную
+     * @param id - id задачи
+     */
     public void markAsDoneTask(UUID id)
     {
         Optional<TaskEnt> optionalTask = taskRepo.findById(id);
@@ -84,6 +112,10 @@ public class TasksService {
         taskRepo.flush();
     }
 
+    /**
+     * Удалить задачу из списка
+     * @param id - id задачи
+     */
     public void removeTask(UUID id)
     {
         Optional<TaskEnt> optionalTask = taskRepo.findById(id);

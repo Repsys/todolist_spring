@@ -11,12 +11,15 @@ import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.util.*;
 
+/**
+ * JPA Сущность Списка задач
+ */
 @Entity(name = "List")
 @Table(name = "lists")
 public class ListEnt {
     @Getter
     @Id
-    private UUID id;
+    private final UUID id = UUID.randomUUID();
 
     @Getter
     @JsonIgnore
@@ -34,10 +37,5 @@ public class ListEnt {
     @UpdateTimestamp
     private Timestamp modifyDate;
 
-    public ListEnt()
-    {
-        id = UUID.randomUUID();
-        name = "";
-    }
 
 }

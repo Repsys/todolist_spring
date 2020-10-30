@@ -11,27 +11,29 @@ import pikachurin.leonid.todolist.repository.ListRepo;
 
 import java.util.*;
 
+/**
+ * Сервис по операциям со Списками задач
+ */
 @Service
 public class ListsService {
     @Autowired
     private ListRepo listRepo;
 
-    public List<ListEnt> getLists(Integer quantity, Integer page, String sort, Boolean isInvert)
+    /**
+     * Получить списки с сортировкой и фильтрацией
+     * @param pageable - параметры пагинации и сортировки
+     * @return массив списков
+     */
+    public List<ListEnt> getLists(Pageable pageable)
     {
-        if (quantity > 100 || quantity < 1) quantity = 10;
-
-        String[] sortValues = {"name", "createDate", "modifyDate"};
-        if (Arrays.stream(sortValues).noneMatch(sort::equals))
-            throw new InvalidSortValueException(sort);
-
-        Sort.Direction sortDir;
-        if (isInvert) sortDir = Sort.Direction.DESC;
-        else sortDir = Sort.Direction.ASC;
-
-        Pageable pageable = PageRequest.of(page, quantity, Sort.by(sortDir, sort));
         return listRepo.findAll(pageable).getContent();
     }
 
+    /**
+     * Получить список по его id
+     * @param id - id списка
+     * @return список
+     */
     public ListEnt getList(UUID id) {
         Optional<ListEnt> optionalList = listRepo.findById(id);
         if (optionalList.isEmpty())
@@ -40,6 +42,11 @@ public class ListsService {
         return optionalList.get();
     }
 
+    /**
+     * Создать новый список
+     * @param listBody - параметры нового списка
+     * @return созданный список
+     */
     public ListEnt createList(ListRequestBody listBody) {
         if (listBody.getName().isEmpty())
             throw new IncorrectNameException();
@@ -50,6 +57,12 @@ public class ListsService {
         return list;
     }
 
+    /**
+     * Изменить список
+     * @param id - id списка
+     * @param listBody - параметры изменённого списка
+     * @return изменённый список
+     */
     public ListEnt modifyList(UUID id, ListRequestBody listBody) {
         Optional<ListEnt> optionalList = listRepo.findById(id);
         if (optionalList.isEmpty())
@@ -63,6 +76,10 @@ public class ListsService {
         return list;
     }
 
+    /**
+     * Удалить список
+     * @param id - id списка
+     */
     public void removeList(UUID id) {
         Optional<ListEnt> optionalList = listRepo.findById(id);
         if (optionalList.isEmpty())

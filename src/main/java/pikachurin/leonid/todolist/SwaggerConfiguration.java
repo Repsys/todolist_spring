@@ -5,6 +5,9 @@ import springfox.documentation.builders.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
+/**
+ * Конфигурация для Swagger
+ */
 @Configuration
 public class SwaggerConfiguration {
     @Bean

@@ -3,13 +3,16 @@ package pikachurin.leonid.todolist.model;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+/**
+ * Класс любого ответа
+ */
 public class MyResponse {
     @Getter
-    private String message;
+    private final String message;
     @Getter
-    private HttpStatus status;
+    private final HttpStatus status;
     @Getter
-    private int code;
+    private final int code;
 
     public MyResponse(String message, HttpStatus status)
     {
