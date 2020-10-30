@@ -2,13 +2,12 @@ package pikachurin.leonid.todolist.controller;
 
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import pikachurin.leonid.todolist.entity.*;
 import pikachurin.leonid.todolist.exception.*;
 import pikachurin.leonid.todolist.model.*;
-import pikachurin.leonid.todolist.repository.ListRepo;
+import pikachurin.leonid.todolist.service.ListsService;
 
 import java.sql.Timestamp;
 import java.util.*;
@@ -18,7 +17,7 @@ import java.util.*;
 @RequestMapping("lists")
 public class ListsController {
     @Autowired
-    private ListRepo listRepo;
+    private ListsService listsService;
 
     @ApiOperation("Получить списки с сортировкой и фильтрацией")
     @GetMapping
@@ -31,18 +30,8 @@ public class ListsController {
             @RequestParam(required = false) Optional<Timestamp> createDate,
             @RequestParam(required = false) Optional<Timestamp> modifyDate)
     {
-        if (quantity > 100 || quantity < 1) quantity = 10;
-
-        String[] sortValues = {"name", "createDate", "modifyDate"};
-        if (Arrays.stream(sortValues).noneMatch(sort::equals))
-            throw new InvalidSortValueException(sort);
-
-        Sort.Direction sortDir;
-        if (isInvert) sortDir = Sort.Direction.DESC;
-        else sortDir = Sort.Direction.ASC;
-
-        Pageable pageable = PageRequest.of(page, quantity, Sort.by(sortDir, sort));
-        return new ResponseEntity(listRepo.findAll(pageable).getContent(), HttpStatus.OK);
+        List<ListEnt> lists = listsService.getLists(quantity, page, sort, isInvert);
+        return new ResponseEntity(lists, HttpStatus.OK);
     }
 
     @ApiOperation("Получить список по его id")
@@ -50,11 +39,8 @@ public class ListsController {
     public ResponseEntity getList(
             @PathVariable("id") UUID id)
     {
-        Optional<ListEnt> optionalList = listRepo.findById(id);
-        if (optionalList.isEmpty())
-            throw new ListNotFoundException(id);
-
-        return new ResponseEntity(optionalList.get(), HttpStatus.OK);
+        ListEnt list = listsService.getList(id);
+        return new ResponseEntity(list, HttpStatus.OK);
     }
 
     @ApiOperation("Создать новый список")
@@ -62,13 +48,7 @@ public class ListsController {
     public ResponseEntity createList(
             @RequestBody ListRequestBody listBody)
     {
-        if (listBody.getName().isEmpty())
-            throw new IncorrectNameException();
-
-        ListEnt list = new ListEnt();
-        list.setName(listBody.getName());
-        list = listRepo.saveAndFlush(list);
-
+        ListEnt list = listsService.createList(listBody);
         return new ResponseEntity(list, HttpStatus.CREATED);
     }
 
@@ -78,15 +58,7 @@ public class ListsController {
             @PathVariable("id") UUID id,
             @RequestBody ListRequestBody listBody)
     {
-        Optional<ListEnt> optionalList = listRepo.findById(id);
-        if (optionalList.isEmpty())
-            throw new ListNotFoundException(id);
-        if (listBody.getName().isEmpty())
-            throw new IncorrectNameException();
-
-        ListEnt list = optionalList.get();
-        list.setName(listBody.getName());
-        listRepo.flush();
+        ListEnt list = listsService.modifyList(id, listBody);
         return new ResponseEntity(list, HttpStatus.OK);
     }
 
@@ -95,12 +67,7 @@ public class ListsController {
     public ResponseEntity removeList(
             @PathVariable("id") UUID id)
     {
-        Optional<ListEnt> optionalList = listRepo.findById(id);
-        if (optionalList.isEmpty())
-            throw new ListNotFoundException(id);
-
-        ListEnt list = optionalList.get();
-        listRepo.delete(list);
+        listsService.removeList(id);
         return new ResponseEntity(new MyResponse("Список успешно удален", HttpStatus.OK), HttpStatus.OK);
     }
 }
