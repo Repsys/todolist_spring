@@ -13,7 +13,7 @@
                              nullable="false"/>
             </column>
             <column name="name"
-                    type="VARCHAR(100)">
+                    type="VARCHAR(128)">
                 <constraints nullable="false"/>
             </column>
             <column name="create_date"

@@ -2,11 +2,11 @@ package pikachurin.leonid.todolist.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
-import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import pikachurin.leonid.todolist.entity.ListEnt;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import pikachurin.leonid.todolist.entity.*;
 import pikachurin.leonid.todolist.exception.*;
-import pikachurin.leonid.todolist.model.ListRequestBody;
+import pikachurin.leonid.todolist.model.ListBody;
 import pikachurin.leonid.todolist.repository.ListRepo;
 
 import java.util.*;
@@ -20,7 +20,7 @@ public class ListsService {
     private ListRepo listRepo;
 
     /**
-     * Получить списки с сортировкой и фильтрацией
+     * Получить списки с сортировкой и пагинацией
      * @param quantity - количество списков на странице
      * @param page - номер страницы
      * @param sort - параметр сортировки
@@ -61,9 +61,11 @@ public class ListsService {
      * @param listBody - параметры нового списка
      * @return созданный список
      */
-    public ListEnt createList(ListRequestBody listBody) {
-        if (listBody.getName().isEmpty())
-            throw new IncorrectNameException();
+    public ListEnt createList(ListBody listBody) throws MissingServletRequestParameterException
+    {
+        if (listBody.getName() == null)
+            throw new MissingServletRequestParameterException("name", String.class.getTypeName());
+        listBody.validate();
 
         ListEnt list = new ListEnt();
         list.setName(listBody.getName());
@@ -77,15 +79,17 @@ public class ListsService {
      * @param listBody - параметры изменённого списка
      * @return изменённый список
      */
-    public ListEnt modifyList(UUID id, ListRequestBody listBody) {
+    public ListEnt modifyList(UUID id, ListBody listBody) {
         Optional<ListEnt> optionalList = listRepo.findById(id);
         if (optionalList.isEmpty())
             throw new ListNotFoundException(id);
-        if (listBody.getName().isEmpty())
-            throw new IncorrectNameException();
 
+        listBody.validate();
         ListEnt list = optionalList.get();
-        list.setName(listBody.getName());
+
+        if (listBody.getName() != null)
+            list.setName(listBody.getName());
+
         listRepo.flush();
         return list;
     }

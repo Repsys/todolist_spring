@@ -2,11 +2,11 @@ package pikachurin.leonid.todolist.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
-import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import pikachurin.leonid.todolist.entity.*;
 import pikachurin.leonid.todolist.exception.*;
-import pikachurin.leonid.todolist.model.TaskRequestBody;
+import pikachurin.leonid.todolist.model.TaskBody;
 import pikachurin.leonid.todolist.repository.*;
 
 import java.util.*;
@@ -22,7 +22,7 @@ public class TasksService {
     private TaskRepo taskRepo;
 
     /**
-     * Получить задачи из списка
+     * Получить задачи из списка с пагинацией
      * @param listId - id списка
      * @param quantity - количество задач на странице
      * @param page - номер страницы
@@ -60,13 +60,21 @@ public class TasksService {
      * @param taskBody - параметры новой задачи
      * @return созданная задача
      */
-    public TaskEnt addTask(UUID listId, TaskRequestBody taskBody)
+    public TaskEnt addTask(UUID listId, TaskBody taskBody) throws MissingServletRequestParameterException
     {
         Optional<ListEnt> optionalList = listRepo.findById(listId);
         if (optionalList.isEmpty())
             throw new ListNotFoundException(listId);
-        if (taskBody.getName().isEmpty())
-            throw new IncorrectNameException();
+
+        if (taskBody.getName() == null)
+            throw new MissingServletRequestParameterException("name", String.class.getTypeName());
+        if (taskBody.getDescription() == null)
+            taskBody.setDescription("");
+        if (taskBody.getPriority() == null)
+            taskBody.setPriority(0);
+        if (taskBody.getIsDone() == null)
+            taskBody.setIsDone(false);
+        taskBody.validate();
 
         TaskEnt task = new TaskEnt();
         task.setName(taskBody.getName());
@@ -84,19 +92,24 @@ public class TasksService {
      * @param taskBody - параметры изменённой задачи
      * @return изменённая задача
      */
-    public TaskEnt modifyTask(UUID id, TaskRequestBody taskBody)
+    public TaskEnt modifyTask(UUID id, TaskBody taskBody)
     {
         Optional<TaskEnt> optionalTask = taskRepo.findById(id);
         if (optionalTask.isEmpty())
             throw new TaskNotFoundException(id);
-        if (taskBody.getName().isEmpty())
-            throw new IncorrectNameException();
 
+        taskBody.validate();
         TaskEnt task = optionalTask.get();
-        task.setName(taskBody.getName());
-        task.setDescription(taskBody.getDescription());
-        task.setPriority(taskBody.getPriority());
-        task.setIsDone(taskBody.getIsDone());
+
+        if (taskBody.getName() != null)
+            task.setName(taskBody.getName());
+        if (taskBody.getDescription() != null)
+            task.setDescription(taskBody.getDescription());
+        if (taskBody.getPriority() != null)
+            task.setPriority(taskBody.getPriority());
+        if (taskBody.getIsDone() != null)
+            task.setIsDone(taskBody.getIsDone());
+
         taskRepo.flush();
         return task;
     }

@@ -33,7 +33,7 @@ public class ExceptionController {
     public ResponseEntity<MyResponse> handleMissingParams(MissingServletRequestParameterException exception)
     {
         String name = exception.getParameterName();
-        MyResponse response = new MyResponse("Параметр " + name + " не задан", HttpStatus.BAD_REQUEST);
+        MyResponse response = new MyResponse("Параметр '" + name + "' не задан", HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(response, response.getStatus());
     }
 }

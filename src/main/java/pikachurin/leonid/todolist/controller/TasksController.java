@@ -2,13 +2,11 @@ package pikachurin.leonid.todolist.controller;
 
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
 import org.springframework.http.*;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 import pikachurin.leonid.todolist.entity.*;
-import pikachurin.leonid.todolist.exception.*;
 import pikachurin.leonid.todolist.model.*;
-import pikachurin.leonid.todolist.repository.*;
 import pikachurin.leonid.todolist.service.TasksService;
 
 import java.util.*;
@@ -23,13 +21,13 @@ public class TasksController {
     private TasksService tasksService;
 
     /**
-     * Получить задачи из списка
+     * Получить задачи из списка с пагинацией
      * @param listId - id списка
      * @param quantity - количество задач на странице
      * @param page - номер страницы
      * @return массив задач
      */
-    @ApiOperation("Получить задачи из списка")
+    @ApiOperation("Получить задачи из списка с пагинацией")
     @GetMapping("lists/{list_id}/tasks")
     public ResponseEntity<List<TaskEnt>> getTasks(
             @PathVariable("list_id") UUID listId,
@@ -64,7 +62,8 @@ public class TasksController {
     @PostMapping("lists/{list_id}/tasks")
     public ResponseEntity<TaskEnt> addTask(
             @PathVariable("list_id") UUID listId,
-            @RequestBody TaskRequestBody taskBody)
+            @RequestBody TaskBody taskBody)
+            throws MissingServletRequestParameterException
     {
         TaskEnt task = tasksService.addTask(listId, taskBody);
         return new ResponseEntity<>(task, HttpStatus.CREATED);
@@ -80,7 +79,7 @@ public class TasksController {
     @PutMapping("tasks/{id}")
     public ResponseEntity<TaskEnt> modifyTask(
             @PathVariable("id") UUID id,
-            @RequestBody TaskRequestBody taskBody)
+            @RequestBody TaskBody taskBody)
     {
         TaskEnt task = tasksService.modifyTask(id, taskBody);
         return new ResponseEntity<>(task, HttpStatus.OK);

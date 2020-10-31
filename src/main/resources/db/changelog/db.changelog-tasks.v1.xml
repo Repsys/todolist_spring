@@ -19,7 +19,7 @@
                              nullable="false"/>
             </column>
             <column name="name"
-                    type="VARCHAR(100)">
+                    type="VARCHAR(128)">
                 <constraints nullable="false"/>
             </column>
             <column name="create_date"
@@ -31,10 +31,12 @@
                 <constraints nullable="false"/>
             </column>
             <column name="description"
-                    type="TEXT">
+                    type="VARCHAR(256)">
+                <constraints nullable="false"/>
             </column>
             <column name="priority"
                     type="SMALLINT">
+                <constraints nullable="false"/>
             </column>
             <column name="is_done"
                     type="BOOLEAN">

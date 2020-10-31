@@ -7,6 +7,7 @@ import org.hibernate.annotations.*;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.*;
 import java.util.UUID;
 
 /**
@@ -16,16 +17,20 @@ import java.util.UUID;
 @Table(name = "tasks")
 public class TaskEnt {
     @Getter
+    @NotNull
     @Id
     private final UUID id = UUID.randomUUID();
 
     @Getter @Setter
     @JsonIgnore
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "list_id")
     private ListEnt list;
 
     @Getter @Setter
+    @NotBlank
+    @Column(length = 128)
     private String name;
 
     @Getter
@@ -37,12 +42,16 @@ public class TaskEnt {
     private java.sql.Timestamp modifyDate;
 
     @Getter @Setter
+    @NotNull
+    @Column(length = 256)
     private String description;
 
     @Getter @Setter
+    @NotNull
     private Integer priority;
 
     @Getter @Setter
+    @NotNull
     private Boolean isDone;
 
 }

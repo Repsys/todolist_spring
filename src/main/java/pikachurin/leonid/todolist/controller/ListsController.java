@@ -2,11 +2,10 @@ package pikachurin.leonid.todolist.controller;
 
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
 import org.springframework.http.*;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 import pikachurin.leonid.todolist.entity.*;
-import pikachurin.leonid.todolist.exception.*;
 import pikachurin.leonid.todolist.model.*;
 import pikachurin.leonid.todolist.service.ListsService;
 
@@ -24,26 +23,20 @@ public class ListsController {
     private ListsService listsService;
 
     /**
-     * Получить списки с сортировкой и фильтрацией
+     * Получить списки с сортировкой и пагинацией
      * @param quantity - количество списков на странице
      * @param page - номер страницы
      * @param sort - параметр сортировки
      * @param isInvert - инвертировать порядок списков
-     * @param name - значение фильтрации для name
-     * @param createDate - значение фильтрации для createDate
-     * @param modifyDate - значение фильтрации для modifyDate
      * @return массив списков
      */
-    @ApiOperation("Получить списки с сортировкой и фильтрацией")
+    @ApiOperation("Получить списки с сортировкой и пагинацией")
     @GetMapping
     public ResponseEntity<List<ListEnt>> getLists(
             @RequestParam(required = false, defaultValue = "10") Integer quantity,
             @RequestParam(required = false, defaultValue = "0") Integer page,
             @RequestParam(required = false, defaultValue = "createDate") String sort,
-            @RequestParam(required = false, defaultValue = "false") Boolean isInvert,
-            @RequestParam(required = false) Optional<String> name,
-            @RequestParam(required = false) Optional<Timestamp> createDate,
-            @RequestParam(required = false) Optional<Timestamp> modifyDate)
+            @RequestParam(required = false, defaultValue = "false") Boolean isInvert)
     {
         List<ListEnt> lists = listsService.getLists(quantity, page, sort, isInvert);
         return new ResponseEntity<>(lists, HttpStatus.OK);
@@ -71,7 +64,8 @@ public class ListsController {
     @ApiOperation("Создать новый список")
     @PostMapping
     public ResponseEntity<ListEnt> createList(
-            @RequestBody ListRequestBody listBody)
+            @RequestBody ListBody listBody)
+            throws MissingServletRequestParameterException
     {
         ListEnt list = listsService.createList(listBody);
         return new ResponseEntity<>(list, HttpStatus.CREATED);
@@ -87,7 +81,7 @@ public class ListsController {
     @PutMapping("/{id}")
     public ResponseEntity<ListEnt> modifyList(
             @PathVariable("id") UUID id,
-            @RequestBody ListRequestBody listBody)
+            @RequestBody ListBody listBody)
     {
         ListEnt list = listsService.modifyList(id, listBody);
         return new ResponseEntity<>(list, HttpStatus.OK);

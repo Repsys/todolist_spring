@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -18,6 +19,7 @@ import java.util.*;
 @Table(name = "lists")
 public class ListEnt {
     @Getter
+    @NotNull
     @Id
     private final UUID id = UUID.randomUUID();
 
@@ -27,6 +29,8 @@ public class ListEnt {
     private List<TaskEnt> tasks;
 
     @Getter @Setter
+    @NotBlank
+    @Column(length = 128)
     private String name;
 
     @Getter

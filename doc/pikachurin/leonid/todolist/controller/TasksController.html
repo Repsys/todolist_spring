@@ -129,7 +129,7 @@ extends java.lang.Object</pre>
 <tbody>
 <tr class="alt-color" id="i0">
 <td class="col-first"><code>org.springframework.http.ResponseEntity&lt;<a href="../entity/TaskEnt.html" title="class in pikachurin.leonid.todolist.entity">TaskEnt</a>&gt;</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#addTask(java.util.UUID,pikachurin.leonid.todolist.model.TaskRequestBody)">addTask</a></span>&#8203;(java.util.UUID&nbsp;listId,
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#addTask(java.util.UUID,pikachurin.leonid.todolist.model.TaskBody)">addTask</a></span>&#8203;(java.util.UUID&nbsp;listId,
 <a href="../model/TaskRequestBody.html" title="class in pikachurin.leonid.todolist.model">TaskRequestBody</a>&nbsp;taskBody)</code></th>
 <td class="col-last">
 <div class="block">Создать новую задачу в списке</div>
@@ -160,7 +160,7 @@ java.lang.Integer&nbsp;page)</code></th>
 </tr>
 <tr class="alt-color" id="i4">
 <td class="col-first"><code>org.springframework.http.ResponseEntity&lt;<a href="../entity/TaskEnt.html" title="class in pikachurin.leonid.todolist.entity">TaskEnt</a>&gt;</code></td>
-<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#modifyTask(java.util.UUID,pikachurin.leonid.todolist.model.TaskRequestBody)">modifyTask</a></span>&#8203;(java.util.UUID&nbsp;id,
+<th class="col-second" scope="row"><code><span class="member-name-link"><a href="#modifyTask(java.util.UUID,pikachurin.leonid.todolist.model.TaskBody)">modifyTask</a></span>&#8203;(java.util.UUID&nbsp;id,
 <a href="../model/TaskRequestBody.html" title="class in pikachurin.leonid.todolist.model">TaskRequestBody</a>&nbsp;taskBody)</code></th>
 <td class="col-last">
 <div class="block">Изменить задачу</div>
@@ -242,7 +242,7 @@ java.util.UUID&nbsp;id)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="addTask(java.util.UUID,pikachurin.leonid.todolist.model.TaskRequestBody)">
+<section class="detail" id="addTask(java.util.UUID,pikachurin.leonid.todolist.model.TaskBody)">
 <h3>addTask</h3>
 <div class="member-signature"><span class="annotations">@PostMapping("lists/{list_id}/tasks")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="../entity/TaskEnt.html" title="class in pikachurin.leonid.todolist.entity">TaskEnt</a>&gt;</span>&nbsp;<span class="member-name">addTask</span>&#8203;(<span class="parameters">@PathVariable("list_id")
@@ -260,7 +260,7 @@ java.util.UUID&nbsp;listId,
 </section>
 </li>
 <li>
-<section class="detail" id="modifyTask(java.util.UUID,pikachurin.leonid.todolist.model.TaskRequestBody)">
+<section class="detail" id="modifyTask(java.util.UUID,pikachurin.leonid.todolist.model.TaskBody)">
 <h3>modifyTask</h3>
 <div class="member-signature"><span class="annotations">@PutMapping("tasks/{id}")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="../entity/TaskEnt.html" title="class in pikachurin.leonid.todolist.entity">TaskEnt</a>&gt;</span>&nbsp;<span class="member-name">modifyTask</span>&#8203;(<span class="parameters">@PathVariable("id")
