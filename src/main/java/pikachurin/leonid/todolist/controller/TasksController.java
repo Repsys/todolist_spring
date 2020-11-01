@@ -27,8 +27,10 @@ public class TasksController {
      * @param page - номер страницы
      * @return массив задач
      */
-    @ApiOperation("Получить задачи из списка с пагинацией")
-    @GetMapping("lists/{list_id}/tasks")
+    @ApiOperation(value = "Получить задачи из списка с пагинацией",
+            response = TaskEnt.class,
+            responseContainer = "List")
+    @GetMapping("/lists/{list_id}/tasks")
     public ResponseEntity<List<TaskEnt>> getTasks(
             @PathVariable("list_id") UUID listId,
             @RequestParam(required = false, defaultValue = "10") Integer quantity,
@@ -43,8 +45,9 @@ public class TasksController {
      * @param id - id задачи
      * @return задача
      */
-    @ApiOperation("Получить задачу по её id")
-    @GetMapping("tasks/{id}")
+    @ApiOperation(value = "Получить задачу по её id",
+            response = TaskEnt.class)
+    @GetMapping("/tasks/{id}")
     public ResponseEntity<TaskEnt> getTask(
             @PathVariable("id") UUID id)
     {
@@ -58,8 +61,9 @@ public class TasksController {
      * @param taskBody - тело запроса
      * @return созданная задача
      */
-    @ApiOperation("Создать новую задачу в списке")
-    @PostMapping("lists/{list_id}/tasks")
+    @ApiOperation(value = "Создать новую задачу в списке",
+            response = TaskEnt.class)
+    @PostMapping("/lists/{list_id}/tasks")
     public ResponseEntity<TaskEnt> addTask(
             @PathVariable("list_id") UUID listId,
             @RequestBody TaskBody taskBody)
@@ -75,8 +79,9 @@ public class TasksController {
      * @param taskBody - тело запроса
      * @return изменённая задача
      */
-    @ApiOperation("Изменить задачу")
-    @PutMapping("tasks/{id}")
+    @ApiOperation(value = "Изменить задачу",
+            response = TaskEnt.class)
+    @PutMapping("/tasks/{id}")
     public ResponseEntity<TaskEnt> modifyTask(
             @PathVariable("id") UUID id,
             @RequestBody TaskBody taskBody)
@@ -89,8 +94,9 @@ public class TasksController {
      * Пометить задачу как сделанную
      * @param id - id задачи
      */
-    @ApiOperation("Пометить задачу как сделанную")
-    @PutMapping("tasks/mark-done/{id}")
+    @ApiOperation(value = "Пометить задачу как сделанную",
+            response = MyResponse.class)
+    @PutMapping("/tasks/mark-done/{id}")
     public ResponseEntity<MyResponse> markAsDoneTask(
             @PathVariable("id") UUID id)
     {
@@ -102,8 +108,9 @@ public class TasksController {
      * Удалить задачу из списка
      * @param id - id задачи
      */
-    @ApiOperation("Удалить задачу из списка")
-    @DeleteMapping("tasks/{id}")
+    @ApiOperation(value = "Удалить задачу из списка",
+            response = MyResponse.class)
+    @DeleteMapping("/tasks/{id}")
     public ResponseEntity<MyResponse> removeTask(
             @PathVariable("id") UUID id)
     {

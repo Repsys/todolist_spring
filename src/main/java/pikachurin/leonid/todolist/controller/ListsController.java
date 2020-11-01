@@ -15,9 +15,9 @@ import java.util.*;
 /**
  * Контроллер запросов по операциям со Списками задач
  */
-@Api(description = "Операции со списками задач")
+@Api(value = "/lists", description = "Операции со списками задач")
 @RestController
-@RequestMapping("lists")
+@RequestMapping("/lists")
 public class ListsController {
     @Autowired
     private ListsService listsService;
@@ -30,7 +30,9 @@ public class ListsController {
      * @param isInvert - инвертировать порядок списков
      * @return массив списков
      */
-    @ApiOperation("Получить списки с сортировкой и пагинацией")
+    @ApiOperation(value = "Получить списки с сортировкой и пагинацией",
+        response = ListEnt.class,
+        responseContainer = "List")
     @GetMapping
     public ResponseEntity<List<ListEnt>> getLists(
             @RequestParam(required = false, defaultValue = "10") Integer quantity,
@@ -47,7 +49,8 @@ public class ListsController {
      * @param id - id списка
      * @return список
      */
-    @ApiOperation("Получить список по его id")
+    @ApiOperation(value = "Получить список по его id",
+            response = ListEnt.class)
     @GetMapping("/{id}")
     public ResponseEntity<ListEnt> getList(
             @PathVariable("id") UUID id)
@@ -61,7 +64,8 @@ public class ListsController {
      * @param listBody - тело запроса
      * @return созданный список
      */
-    @ApiOperation("Создать новый список")
+    @ApiOperation(value = "Создать новый список",
+            response = ListEnt.class)
     @PostMapping
     public ResponseEntity<ListEnt> createList(
             @RequestBody ListBody listBody)
@@ -77,7 +81,8 @@ public class ListsController {
      * @param listBody - тело запроса
      * @return изменённый список
      */
-    @ApiOperation("Изменить список")
+    @ApiOperation(value = "Изменить список",
+            response = ListEnt.class)
     @PutMapping("/{id}")
     public ResponseEntity<ListEnt> modifyList(
             @PathVariable("id") UUID id,
@@ -91,7 +96,8 @@ public class ListsController {
      * Удалить список
      * @param id - id списка
      */
-    @ApiOperation("Удалить список")
+    @ApiOperation(value = "Удалить список",
+            response = MyResponse.class)
     @DeleteMapping("/{id}")
     public ResponseEntity<MyResponse> removeList(
             @PathVariable("id") UUID id)

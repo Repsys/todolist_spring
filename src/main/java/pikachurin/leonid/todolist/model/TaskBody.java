@@ -7,6 +7,11 @@ import pikachurin.leonid.todolist.exception.*;
  * Тело запроса для Задачи
  */
 public class TaskBody {
+    private static final int MAX_NAME_LENGTH = 128;
+    private static final int MAX_DESC_LENGTH = 256;
+    private static final int MIN_PRIORITY = 0;
+    private static final int MAX_PRIORITY = 5;
+
     @Getter @Setter
     private String name = null;
 
@@ -26,16 +31,16 @@ public class TaskBody {
         if (name != null) {
             if (name.isBlank())
                 throw new EmptyParameterException("name");
-            else if (name.length() > 128)
-                throw new TooLongStringParameterException("name", 128);
+            else if (name.length() > MAX_NAME_LENGTH)
+                throw new TooLongStringParameterException("name", MAX_NAME_LENGTH);
         }
         if (description != null) {
-            if (description.length() > 256)
-                throw new TooLongStringParameterException("description", 256);
+            if (description.length() > MAX_DESC_LENGTH)
+                throw new TooLongStringParameterException("description", MAX_DESC_LENGTH);
         }
         if (priority != null) {
-            if (priority < 0) priority = 0;
-            else if (priority > 5) priority = 5;
+            if (priority < MIN_PRIORITY) priority = MIN_PRIORITY;
+            else if (priority > MAX_PRIORITY) priority = MAX_PRIORITY;
         }
     }
 }

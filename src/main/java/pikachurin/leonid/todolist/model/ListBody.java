@@ -7,6 +7,8 @@ import pikachurin.leonid.todolist.exception.*;
  * Тело запроса для Списка задач
  */
 public class ListBody {
+    private static final int MAX_NAME_LENGTH = 128;
+
     @Getter @Setter
     private String name = null;
 
@@ -17,8 +19,8 @@ public class ListBody {
         if (name != null) {
             if (name.isBlank())
                 throw new EmptyParameterException("name");
-            else if (name.length() > 128)
-                throw new TooLongStringParameterException("name", 128);
+            else if (name.length() > MAX_NAME_LENGTH)
+                throw new TooLongStringParameterException("name", MAX_NAME_LENGTH);
         }
     }
 }
